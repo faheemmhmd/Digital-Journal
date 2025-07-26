@@ -43,13 +43,13 @@
 
     <!-- Splash Screen -->
     <div id="splash-screen" class="fixed inset-0 bg-white flex flex-col items-center justify-center z-50 transition-opacity duration-500 ease-in-out">
-        <img src="Gemini_Generated_Image_uavgoeuavgoeuavg.png" alt="App Icon" class="w-32 h-32 mb-4 rounded-full shadow-lg">
+        <img src="https://i.imgur.com/3b6j3fK.png" alt="App Icon" class="w-32 h-32 mb-4 rounded-full shadow-lg">
         <h1 class="text-2xl font-bold text-gray-800">Digital Journal</h1>
         <p class="text-gray-500">Loading your thoughts...</p>
     </div>
 
     <!-- Main App Container -->
-    <div id="app-container" class="opacity-0 w-full max-w-sm lg:max-w-6xl mx-auto bg-white lg:bg-transparent rounded-3xl lg:rounded-none shadow-lg lg:shadow-none p-5 lg:p-8 lg:mt-8 space-y-6 lg:space-y-0 lg:grid lg:grid-cols-5 lg:gap-8 transition-opacity duration-500 ease-in-out">
+    <div id="app-container" class="opacity-0 w-full max-w-sm lg:max-w-6xl mx-auto bg-white lg:bg-transparent rounded-3xl lg:rounded-none shadow-lg lg:shadow-none p-5 pt-12 lg:p-8 lg:mt-8 space-y-6 lg:space-y-0 lg:grid lg:grid-cols-5 lg:gap-8 transition-opacity duration-500 ease-in-out">
         
         <!-- Left Column (Calendar) -->
         <div class="lg:col-span-3 lg:bg-white lg:rounded-3xl lg:shadow-lg lg:p-6">
@@ -100,27 +100,35 @@
 
     <!-- Journal Page Container (Initially Hidden) -->
     <div id="journal-page-container" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 lg:p-12">
-        <div id="journal-card" class="w-full h-full max-w-sm lg:max-w-none lg:w-full lg:h-full bg-white rounded-3xl shadow-lg p-5 flex flex-col lg:grid lg:grid-cols-2 lg:gap-8">
-            <div class="flex flex-col h-full">
-                <header class="flex justify-between items-center">
-                    <button id="back-to-main-btn" class="p-2 rounded-full hover:bg-gray-100 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></button>
-                    <h1 id="journal-date-header" class="text-lg font-bold text-gray-800"></h1>
-                    <div class="w-10"></div>
-                </header>
-                <section class="flex-grow my-4">
-                    <textarea id="journal-textarea" class="w-full h-64 lg:h-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-400 focus:outline-none" placeholder="Start writing your thoughts for the day..."></textarea>
-                </section>
-                <section>
-                    <button id="save-entry-btn" class="w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-xl hover:bg-blue-700 transition-all">Save Entry</button>
-                </section>
-            </div>
-            <div class="h-48 lg:h-full mt-4 lg:mt-0">
-                <label for="image-upload-input" class="cursor-pointer block bg-gray-100 rounded-xl w-full h-full overflow-hidden">
-                    <div id="image-collage-container" class="w-full h-full">
-                        <div id="image-placeholder" class="flex items-center justify-center h-full text-gray-400">Click to upload images</div>
-                    </div>
-                </label>
-                <input type="file" id="image-upload-input" accept="image/*" multiple>
+        <div id="journal-card" class="w-full h-full max-w-sm lg:max-w-none lg:w-full lg:h-full bg-white rounded-3xl shadow-lg p-5 flex flex-col">
+            <!-- Header -->
+            <header class="flex-shrink-0 flex justify-between items-center">
+                <button id="back-to-main-btn" class="p-2 rounded-full hover:bg-gray-100 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></button>
+                <h1 id="journal-date-header" class="text-lg font-bold text-gray-800"></h1>
+                <div class="w-10"></div>
+            </header>
+
+            <!-- Main Content Area -->
+            <div class="flex-grow flex flex-col lg:grid lg:grid-cols-2 lg:gap-8 mt-4 overflow-hidden">
+                <!-- Image Column (Order 1 on mobile, Order 2 on desktop) -->
+                <div class="h-48 lg:h-full lg:order-last">
+                    <label for="image-upload-input" class="cursor-pointer block bg-gray-100 rounded-xl w-full h-full overflow-hidden">
+                        <div id="image-collage-container" class="w-full h-full">
+                            <div id="image-placeholder" class="flex items-center justify-center h-full text-gray-400">Click to upload images</div>
+                        </div>
+                    </label>
+                    <input type="file" id="image-upload-input" accept="image/*" multiple>
+                </div>
+
+                <!-- Text Column (Order 2 on mobile, Order 1 on desktop) -->
+                <div class="flex flex-col flex-grow lg:order-first mt-4 lg:mt-0">
+                    <section class="flex-grow">
+                        <textarea id="journal-textarea" class="w-full h-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-400 focus:outline-none" placeholder="Start writing your thoughts for the day..."></textarea>
+                    </section>
+                    <section class="mt-4">
+                        <button id="save-entry-btn" class="w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-xl hover:bg-blue-700 transition-all">Save Entry</button>
+                    </section>
+                </div>
             </div>
         </div>
     </div>
