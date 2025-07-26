@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Journal</title>
-     <link rel="icon" type="image/png" href="Gemini_Generated_Image_uavgoeuavgoeuavg.png">
     
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -31,81 +30,99 @@
         
         #image-upload-input, .goal-delete-btn, .goal-menu { display: none; }
         .delete-mode .goal-delete-btn { display: inline-block; }
+
+        /* Hide slider arrows on touch devices */
+        @media (hover: none) {
+            #slide-left, #slide-right {
+                display: none;
+            }
+        }
     </style>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+<body class="bg-gray-100">
+
+    <!-- Splash Screen -->
+    <div id="splash-screen" class="fixed inset-0 bg-white flex flex-col items-center justify-center z-50 transition-opacity duration-500 ease-in-out">
+        <img src="Gemini_Generated_Image_uavgoeuavgoeuavg.png" alt="App Icon" class="w-32 h-32 mb-4 rounded-full shadow-lg">
+        <h1 class="text-2xl font-bold text-gray-800">Digital Journal</h1>
+        <p class="text-gray-500">Loading your thoughts...</p>
+    </div>
 
     <!-- Main App Container -->
-    <div id="app-container" class="w-full max-w-sm mx-auto bg-white rounded-3xl shadow-lg p-5 space-y-6">
-        <!-- Header -->
-        <header class="flex justify-between items-center">
-            <h1 class="text-xl font-bold text-gray-800">Digital Journal</h1>
-            <div id="year-display" class="bg-gray-100 text-gray-800 font-semibold px-4 py-2 rounded-xl transition-colors duration-300">2025</div>
-        </header>
-
-        <!-- Calendar Progress Section -->
-        <section>
-            <div class="flex justify-end items-center mb-2 space-x-2">
-                <button id="dense-view-btn" class="p-2 rounded-lg transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg></button>
-                <button id="single-view-btn" class="p-2 rounded-lg transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg></button>
-            </div>
-            <div class="flex justify-between items-center mb-2">
-                 <button id="prev-month-btn" class="p-2 rounded-full hover:bg-gray-100 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></button>
-                <div id="month-header-container" class="flex-grow text-center"></div>
-                 <button id="next-month-btn" class="p-2 rounded-full hover:bg-gray-100 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></button>
-            </div>
-            <div id="calendar-container" class="overflow-hidden"><div id="calendar-grid" class="transition-transform duration-300 ease-in-out"></div></div>
-        </section>
+    <div id="app-container" class="opacity-0 w-full max-w-sm lg:max-w-6xl mx-auto bg-white lg:bg-transparent rounded-3xl lg:rounded-none shadow-lg lg:shadow-none p-5 lg:p-8 lg:mt-8 space-y-6 lg:space-y-0 lg:grid lg:grid-cols-5 lg:gap-8 transition-opacity duration-500 ease-in-out">
         
-        <!-- Goals Slider Section -->
-        <section>
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-semibold text-gray-800">Goals</h3>
-                <div class="flex items-center space-x-3">
-                    <button id="slide-left" class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></button>
-                    <div id="slider-dots" class="flex space-x-2"></div>
-                    <button id="slide-right" class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></button>
-                </div>
-                <button id="add-goal-category-btn" class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg></button>
-            </div>
-            <div id="slider-container" class="slider-container flex overflow-x-auto snap-x snap-mandatory no-scrollbar rounded-xl">
-                <!-- Goal cards will be dynamically inserted here -->
-            </div>
-        </section>
+        <!-- Left Column (Calendar) -->
+        <div class="lg:col-span-3 lg:bg-white lg:rounded-3xl lg:shadow-lg lg:p-6">
+            <header class="flex justify-between items-center">
+                <h1 class="text-xl font-bold text-gray-800">Digital Journal</h1>
+                <div id="year-display" class="bg-gray-100 text-gray-800 font-semibold px-4 py-2 rounded-xl transition-colors duration-300">2025</div>
+            </header>
 
-        <!-- Progress Chart Section -->
-        <section class="bg-gray-100 p-5 rounded-xl">
-             <h3 class="font-semibold text-gray-800 mb-4">Progress Charts</h3>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="flex flex-col items-center justify-start">
-                    <svg id="daily-goals-chart-svg" class="w-24 h-24" viewBox="0 0 36 36"></svg>
-                    <p class="text-sm text-gray-500 mt-2">Daily Goals</p>
+            <section class="mt-6">
+                <div class="flex justify-end items-center mb-2 space-x-2">
+                    <button id="dense-view-btn" class="p-2 rounded-lg transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg></button>
+                    <button id="single-view-btn" class="p-2 rounded-lg transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg></button>
                 </div>
-                <div class="flex flex-col items-center justify-start">
-                    <svg id="progress-chart-svg" class="w-full h-24" viewBox="0 0 140 100" preserveAspectRatio="xMidYMid meet"></svg>
-                    <p class="text-sm text-gray-500 mt-2">Journaling</p>
+                <div class="flex justify-between items-center mb-2">
+                    <button id="prev-month-btn" class="p-2 rounded-full hover:bg-gray-100 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></button>
+                    <div id="month-header-container" class="flex-grow text-center"></div>
+                    <button id="next-month-btn" class="p-2 rounded-full hover:bg-gray-100 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></button>
                 </div>
-            </div>
-        </section>
+                <div id="calendar-container" class="overflow-hidden"><div id="calendar-grid" class="transition-transform duration-300 ease-in-out"></div></div>
+            </section>
+        </div>
+
+        <!-- Right Column (Goals & Charts) -->
+        <div class="lg:col-span-2 space-y-6">
+             <section class="lg:bg-white lg:rounded-3xl lg:shadow-lg lg:p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Goals</h3>
+                    <div class="flex items-center space-x-3">
+                        <button id="slide-left" class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></button>
+                        <div id="slider-dots" class="flex space-x-2"></div>
+                        <button id="slide-right" class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></button>
+                    </div>
+                    <button id="add-goal-category-btn" class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg></button>
+                </div>
+                <div id="slider-container" class="slider-container flex overflow-x-auto snap-x snap-mandatory no-scrollbar rounded-xl">
+                    <!-- Goal cards will be dynamically inserted here -->
+                </div>
+            </section>
+
+            <section class="bg-gray-100 lg:bg-white rounded-3xl shadow-lg p-5 lg:p-6">
+                 <h3 class="font-semibold text-gray-800 mb-4">Progress Charts</h3>
+                <div id="charts-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Charts will be dynamically inserted here -->
+                </div>
+            </section>
+        </div>
     </div>
 
     <!-- Journal Page Container (Initially Hidden) -->
-    <div id="journal-page-container" class="hidden w-full max-w-sm mx-auto bg-white rounded-3xl shadow-lg p-5 space-y-6">
-        <header class="flex justify-between items-center">
-            <button id="back-to-main-btn" class="p-2 rounded-full hover:bg-gray-100 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></button>
-            <h1 id="journal-date-header" class="text-lg font-bold text-gray-800"></h1>
-            <div class="w-10"></div>
-        </header>
-        <section>
-            <label for="image-upload-input" class="cursor-pointer block bg-gray-100 rounded-xl w-full h-48 overflow-hidden">
-                <div id="image-collage-container" class="w-full h-full">
-                    <div id="image-placeholder" class="flex items-center justify-center h-full text-gray-400">Click to upload images</div>
-                </div>
-            </label>
-            <input type="file" id="image-upload-input" accept="image/*" multiple>
-        </section>
-        <section><textarea id="journal-textarea" class="w-full h-64 p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-400 focus:outline-none" placeholder="Start writing your thoughts for the day..."></textarea></section>
-        <section><button id="save-entry-btn" class="w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-xl hover:bg-blue-700 transition-all">Save Entry</button></section>
+    <div id="journal-page-container" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 lg:p-12">
+        <div id="journal-card" class="w-full h-full max-w-sm lg:max-w-none lg:w-full lg:h-full bg-white rounded-3xl shadow-lg p-5 flex flex-col lg:grid lg:grid-cols-2 lg:gap-8">
+            <div class="flex flex-col h-full">
+                <header class="flex justify-between items-center">
+                    <button id="back-to-main-btn" class="p-2 rounded-full hover:bg-gray-100 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></button>
+                    <h1 id="journal-date-header" class="text-lg font-bold text-gray-800"></h1>
+                    <div class="w-10"></div>
+                </header>
+                <section class="flex-grow my-4">
+                    <textarea id="journal-textarea" class="w-full h-64 lg:h-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-400 focus:outline-none" placeholder="Start writing your thoughts for the day..."></textarea>
+                </section>
+                <section>
+                    <button id="save-entry-btn" class="w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-xl hover:bg-blue-700 transition-all">Save Entry</button>
+                </section>
+            </div>
+            <div class="h-48 lg:h-full mt-4 lg:mt-0">
+                <label for="image-upload-input" class="cursor-pointer block bg-gray-100 rounded-xl w-full h-full overflow-hidden">
+                    <div id="image-collage-container" class="w-full h-full">
+                        <div id="image-placeholder" class="flex items-center justify-center h-full text-gray-400">Click to upload images</div>
+                    </div>
+                </label>
+                <input type="file" id="image-upload-input" accept="image/*" multiple>
+            </div>
+        </div>
     </div>
 
     <!-- Modal for Adding Goals/Categories -->
@@ -159,28 +176,29 @@
                 const existingEntry = entries[dateKey];
                 document.getElementById('journal-textarea').value = existingEntry?.text || '';
                 renderCollage(existingEntry?.images || []);
-                appContainer.classList.add('hidden');
                 journalPageContainer.classList.remove('hidden');
             };
 
             const showMainPage = () => {
-                appContainer.classList.remove('hidden');
                 journalPageContainer.classList.add('hidden');
                 renderCalendar();
-                renderProgressChart();
-                renderDailyGoalsChart();
+                renderAllCharts();
             };
             document.getElementById('back-to-main-btn').addEventListener('click', showMainPage);
+            journalPageContainer.addEventListener('click', (e) => {
+                if (e.target === journalPageContainer) {
+                    showMainPage();
+                }
+            });
 
             // --- JOURNAL PAGE LOGIC ---
             const imageUploadInput = document.getElementById('image-upload-input');
             const imageCollageContainer = document.getElementById('image-collage-container');
-            const imagePlaceholder = document.getElementById('image-placeholder');
-
+            
             const renderCollage = (images) => {
                 imageCollageContainer.innerHTML = '';
-                if (images.length === 0) {
-                    imageCollageContainer.appendChild(imagePlaceholder);
+                if (!images || images.length === 0) {
+                    imageCollageContainer.innerHTML = '<div id="image-placeholder" class="flex items-center justify-center h-full text-gray-400">Click to upload images</div>';
                     return;
                 }
 
@@ -292,16 +310,28 @@
 
                 renderMonthHeader();
 
+                const isDesktop = window.innerWidth >= 1024;
+                
                 if (currentCalendarView === 'single') {
-                    calendarGrid.className = 'grid grid-cols-7 gap-1';
-                    renderMonthGrid(currentDate.getMonth());
-                } else {
-                    calendarGrid.className = 'grid grid-cols-3 gap-2';
-                    [-1, 0, 1].forEach(offset => renderMonthGrid(currentDate.getMonth() + offset, true));
+                    if (isDesktop) {
+                        calendarGrid.className = 'grid grid-cols-2 gap-4';
+                        const monthsToRender = 4;
+                        for (let i = 0; i < monthsToRender; i++) {
+                            renderMonthGrid(currentDate.getMonth() + i, true, true);
+                        }
+                    } else {
+                        calendarGrid.className = 'grid grid-cols-7 gap-1';
+                        renderMonthGrid(currentDate.getMonth(), false);
+                    }
+                } else { // Dense View
+                    calendarGrid.className = `grid gap-2 ${isDesktop ? 'grid-cols-3' : 'grid-cols-3'}`;
+                    const monthsToRender = isDesktop ? 6 : 3;
+                    const offsets = Array.from({length: monthsToRender}, (_, i) => i - Math.floor((monthsToRender - 1) / 2));
+                    offsets.forEach(offset => renderMonthGrid(currentDate.getMonth() + offset, true));
                 }
             };
             
-            const renderMonthGrid = (monthIndex, isDense = false) => {
+            const renderMonthGrid = (monthIndex, isDense = false, isSingleDesktop = false) => {
                 const year = currentDate.getFullYear();
                 const monthDate = new Date(year, monthIndex, 1);
                 const month = monthDate.getMonth();
@@ -311,11 +341,11 @@
                 const container = document.createElement('div');
                 let grid;
                 
-                if(isDense) {
+                if(isDense || isSingleDesktop) {
                     container.className = 'w-full';
                     const nameEl = document.createElement('p');
-                    nameEl.textContent = monthName.substring(0, 3).toUpperCase();
-                    nameEl.className = `text-center font-semibold text-xs mb-2 ${month === currentDate.getMonth() ? 'text-blue-600 font-bold' : 'text-gray-500'}`;
+                    nameEl.textContent = isSingleDesktop ? monthName : monthName.substring(0, 3).toUpperCase();
+                    nameEl.className = `text-center font-semibold text-xs mb-2 ${month === currentDate.getMonth() && actualYear === currentDate.getFullYear() ? 'text-blue-600 font-bold' : 'text-gray-500'}`;
                     container.appendChild(nameEl);
                     grid = document.createElement('div');
                     grid.className = 'grid grid-cols-7 gap-px';
@@ -334,7 +364,7 @@
                     const daySquare = document.createElement('div');
                     const dateKey = `${actualYear}-${month}-${day}`;
                     
-                    if(isDense) {
+                    if(isDense && !isSingleDesktop) {
                         daySquare.className = 'w-full aspect-square rounded-sm cursor-pointer';
                     } else {
                         daySquare.textContent = day;
@@ -350,7 +380,7 @@
                     daySquare.addEventListener('click', () => showJournalPage(dateKey, `${monthName} ${day}, ${actualYear}`));
                     grid.appendChild(daySquare);
                 }
-                if(isDense) calendarGrid.appendChild(container);
+                if(isDense || isSingleDesktop) calendarGrid.appendChild(container);
             };
             
             singleViewBtn.addEventListener('click', () => { currentCalendarView = 'single'; updateViewSwitcher(); });
@@ -429,14 +459,14 @@
                         category.goals[goalIndex].checked = e.target.checked;
                         saveStoredData('goalCategories', goalCategories);
                         renderGoals(categoryIndex);
-                        if (category.title === 'Daily Goals') renderDailyGoalsChart();
+                        renderAllCharts();
                     });
 
                     goalEl.querySelector('.goal-delete-btn').addEventListener('click', () => {
                         category.goals.splice(goalIndex, 1);
                         saveStoredData('goalCategories', goalCategories);
                         renderGoals(categoryIndex);
-                        if (category.title === 'Daily Goals') renderDailyGoalsChart();
+                        renderAllCharts();
                     });
                 });
             };
@@ -474,21 +504,25 @@
                             goalCategories.push({ title: title, goals: [], color: newColor });
                             saveStoredData('goalCategories', goalCategories);
                             renderGoalSliders();
+                            renderAllCharts();
                         }
                     }
                 });
             });
 
-            sliderContainer.addEventListener('click', (e) => {
+            document.body.addEventListener('click', (e) => {
+                if (!e.target.closest('.goal-menu-btn')) {
+                    document.querySelectorAll('.goal-menu').forEach(m => m.style.display = 'none');
+                }
+
                 const menuBtn = e.target.closest('.goal-menu-btn');
                 if (menuBtn) {
                     e.stopPropagation();
                     const menuIndex = menuBtn.dataset.menuIndex;
                     const menuEl = document.getElementById(`goal-menu-${menuIndex}`);
-                    document.querySelectorAll('.goal-menu').forEach(m => {
-                        if (m !== menuEl) m.style.display = 'none';
-                    });
-                    menuEl.style.display = menuEl.style.display === 'block' ? 'none' : 'block';
+                    const isVisible = menuEl.style.display === 'block';
+                    document.querySelectorAll('.goal-menu').forEach(m => m.style.display = 'none');
+                    if (!isVisible) menuEl.style.display = 'block';
                     return;
                 }
 
@@ -496,7 +530,7 @@
                 if (actionLink) {
                     e.preventDefault();
                     const action = actionLink.dataset.action;
-                    const categoryIndex = actionLink.closest('.goal-menu').id.split('-')[2];
+                    const categoryIndex = actionLink.closest('.goal-menu').id.match(/\d+/)[0];
                     const goalCategories = getStoredData('goalCategories', []);
 
                     if (goalCategories[categoryIndex] && action === 'add') {
@@ -508,7 +542,7 @@
                                     goalCategories[categoryIndex].goals.push({ text, checked: false });
                                     saveStoredData('goalCategories', goalCategories);
                                     renderGoals(categoryIndex);
-                                    if (goalCategories[categoryIndex].title === 'Daily Goals') renderDailyGoalsChart();
+                                    renderAllCharts();
                                 }
                             }
                         });
@@ -519,20 +553,44 @@
                             goalCategories.splice(categoryIndex, 1);
                             saveStoredData('goalCategories', goalCategories);
                             renderGoalSliders();
+                            renderAllCharts();
                         }
                     }
                     actionLink.closest('.goal-menu').style.display = 'none';
                 }
             });
 
-            document.addEventListener('click', () => document.querySelectorAll('.goal-menu').forEach(m => m.style.display = 'none'));
-
             // --- CHARTS LOGIC ---
-            const renderDailyGoalsChart = () => {
-                const chartSvg = document.getElementById('daily-goals-chart-svg');
-                chartSvg.innerHTML = '';
+            const chartsGrid = document.getElementById('charts-grid');
+            
+            const renderAllCharts = () => {
+                chartsGrid.innerHTML = '';
+                
                 const dailyGoalsCategory = getStoredData('goalCategories', []).find(c => c.title === 'Daily Goals');
-                const goals = dailyGoalsCategory ? dailyGoalsCategory.goals : [];
+                if(dailyGoalsCategory) {
+                    const dailyChartContainer = document.createElement('div');
+                    dailyChartContainer.className = 'flex flex-col items-center justify-start';
+                    dailyChartContainer.innerHTML = `
+                        <svg id="daily-goals-chart-svg" class="w-24 h-24" viewBox="0 0 36 36"></svg>
+                        <p class="text-sm text-gray-500 mt-2">Daily Goals</p>
+                    `;
+                    chartsGrid.appendChild(dailyChartContainer);
+                    renderGoalCompletionChart('daily-goals-chart-svg', dailyGoalsCategory.goals);
+                }
+
+                const journalChartContainer = document.createElement('div');
+                journalChartContainer.className = 'flex flex-col items-center justify-start';
+                journalChartContainer.innerHTML = `
+                    <svg id="progress-chart-svg" class="w-full h-24" viewBox="0 0 140 100" preserveAspectRatio="xMidYMid meet"></svg>
+                    <p class="text-sm text-gray-500 mt-2">Journaling</p>
+                `;
+                chartsGrid.appendChild(journalChartContainer);
+                renderProgressChart();
+            };
+
+            const renderGoalCompletionChart = (svgId, goals) => {
+                const chartSvg = document.getElementById(svgId);
+                if (!chartSvg) return;
                 const completed = goals.filter(g => g.checked).length;
                 const total = goals.length;
                 const percentage = total > 0 ? (completed / total) * 100 : 0;
@@ -547,6 +605,7 @@
 
             const renderProgressChart = () => {
                 const chartSvg = document.getElementById('progress-chart-svg');
+                if (!chartSvg) return;
                 chartSvg.innerHTML = '';
                 const entries = getEntries();
                 const year = 2025;
@@ -559,7 +618,7 @@
                 const spacing = svgWidth / 12 * 0.4;
 
                 entriesPerMonth.forEach((count, index) => {
-                    const barHeight = (count / maxEntries) * (svgHeight - 10); // 10 for padding
+                    const barHeight = (count / maxEntries) * (svgHeight - 10);
                     const x = index * (barWidth + spacing) + (spacing / 2);
                     const y = svgHeight - barHeight;
                     
@@ -569,7 +628,7 @@
                     rect.setAttribute('width', barWidth);
                     rect.setAttribute('height', barHeight);
                     rect.setAttribute('fill', '#3b82f6');
-                    rect.setAttribute('rx', '2'); // Rounded corners
+                    rect.setAttribute('rx', '2');
                     chartSvg.appendChild(rect);
                 });
             };
@@ -597,6 +656,15 @@
                 updateSliderDots();
             };
 
+            sliderContainer.addEventListener('scroll', () => {
+                const slideWidth = sliderContainer.offsetWidth;
+                const newSlide = Math.round(sliderContainer.scrollLeft / slideWidth);
+                if (newSlide !== currentSlide) {
+                    currentSlide = newSlide;
+                    updateSliderDots();
+                }
+            });
+
             slideRightBtn.addEventListener('click', () => {
                 const sliderItems = document.querySelectorAll('.slider-item');
                 if (sliderItems.length > 0) {
@@ -613,10 +681,17 @@
             });
             
             // --- INITIALIZE APP ---
-            updateViewSwitcher();
-            renderGoalSliders();
-            renderProgressChart();
-            renderDailyGoalsChart();
+            const splashScreen = document.getElementById('splash-screen');
+            setTimeout(() => {
+                splashScreen.classList.add('opacity-0');
+                appContainer.classList.remove('opacity-0');
+                setTimeout(() => splashScreen.style.display = 'none', 500);
+
+                window.addEventListener('resize', renderCalendar);
+                updateViewSwitcher();
+                renderGoalSliders();
+                renderAllCharts();
+            }, 1500);
         });
     </script>
 </body>
