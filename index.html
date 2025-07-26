@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Journal</title>
-     <link rel="icon" type="image/png" href="Gemini_Generated_Image_uavgoeuavgoeuavg.png">
+    <link rel="icon" type="image/png" href="Gemini_Generated_Image_uavgoeuavgoeuavg.png">
     
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -44,13 +44,13 @@
 
     <!-- Splash Screen -->
     <div id="splash-screen" class="fixed inset-0 bg-white dark:bg-gray-800 flex flex-col items-center justify-center z-50 transition-opacity duration-500 ease-in-out">
-        <div id="lottie-container" class="w-48 h-48"></div>
+        <img src="https://i.imgur.com/3b6j3fK.png" alt="App Icon" class="w-32 h-32 mb-4 rounded-3xl shadow-lg">
         <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Digital Journal</h1>
         <p class="text-gray-500 dark:text-gray-400">Loading your thoughts...</p>
     </div>
 
     <!-- Main App Container -->
-    <div id="app-container" class="opacity-0 w-full max-w-sm lg:max-w-6xl mx-auto bg-white lg:bg-transparent rounded-3xl lg:rounded-none shadow-lg lg:shadow-none p-5 pt-12 lg:p-8 lg:mt-8 space-y-6 lg:space-y-0 lg:grid lg:grid-cols-5 lg:gap-8 transition-opacity duration-500 ease-in-out">
+    <div id="app-container" class="opacity-0 w-full max-w-sm lg:max-w-6xl mx-auto bg-white dark:bg-gray-800 lg:bg-transparent rounded-3xl lg:rounded-none shadow-lg lg:shadow-none p-5 pt-12 lg:p-8 lg:mt-8 space-y-6 lg:space-y-0 lg:grid lg:grid-cols-5 lg:gap-8 transition-opacity duration-500 ease-in-out">
         
         <!-- Left Column (Calendar) -->
         <div class="lg:col-span-3 lg:bg-white lg:dark:bg-gray-800 lg:rounded-3xl lg:shadow-lg lg:p-6">
@@ -150,7 +150,6 @@
         </div>
     </div>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // --- DATA STORAGE & DEFAULTS ---
@@ -738,14 +737,6 @@
                 splashScreen.classList.add('opacity-0');
                 appContainer.classList.remove('opacity-0');
                 setTimeout(() => splashScreen.style.display = 'none', 500);
-
-                lottie.loadAnimation({
-                    container: document.getElementById('lottie-container'),
-                    renderer: 'svg',
-                    loop: true,
-                    autoplay: true,
-                    path: 'https://assets3.lottiefiles.com/packages/lf20_VwcAQT.json' 
-                });
 
                 window.addEventListener('resize', renderCalendar);
                 updateTheme();
